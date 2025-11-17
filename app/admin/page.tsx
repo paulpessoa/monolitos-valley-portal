@@ -9,6 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { Loader2, Check, X } from 'lucide-react'
 import { toast } from 'sonner'
+import { OpportunityForm } from '@/components/admin/OpportunityForm'
+import { EventForm } from '@/components/admin/EventForm'
+import { BlogPostForm } from '@/components/admin/BlogPostForm'
+import { PartnerForm } from '@/components/admin/PartnerForm'
 
 interface PendingItem {
     id: string
@@ -140,14 +144,15 @@ export default function AdminPage() {
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="mb-8">
-                <h1 className="text-4xl font-bold mb-2">Painel de Moderação</h1>
+                <h1 className="text-4xl font-bold mb-2">Painel de Administração</h1>
                 <p className="text-muted-foreground">
                     {totalPending} {totalPending === 1 ? 'item pendente' : 'itens pendentes'} de aprovação
                 </p>
             </div>
 
-            <Tabs defaultValue="blog" className="w-full">
+            <Tabs defaultValue="create" className="w-full">
                 <TabsList>
+                    <TabsTrigger value="create">Criar Conteúdo</TabsTrigger>
                     <TabsTrigger value="blog">
                         Blog {pending.blog.length > 0 && <Badge className="ml-2">{pending.blog.length}</Badge>}
                     </TabsTrigger>
@@ -164,6 +169,15 @@ export default function AdminPage() {
                         Produtos {pending.products.length > 0 && <Badge className="ml-2">{pending.products.length}</Badge>}
                     </TabsTrigger>
                 </TabsList>
+
+                <TabsContent value="create" className="mt-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <BlogPostForm onSuccess={fetchPending} />
+                        <EventForm onSuccess={fetchPending} />
+                        <OpportunityForm onSuccess={fetchPending} />
+                        <PartnerForm onSuccess={fetchPending} />
+                    </div>
+                </TabsContent>
 
                 {Object.entries(pending).map(([key, items]) => (
                     <TabsContent key={key} value={key} className="mt-6">

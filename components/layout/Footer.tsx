@@ -28,8 +28,7 @@ export function Footer() {
                             />
                         </Link>
                         <p className="text-sm text-muted-foreground">
-                            Ecossistema de inovação do Sertão Central Cearense
-                        </p>
+                            Comunidade de Startups do Sertão Central Cearense                        </p>
                     </div>
 
                     <div className="space-y-3">

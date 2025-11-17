@@ -93,7 +93,7 @@ export default async function HomePage() {
               Bem-vindo à Monólitos Valley
             </h1>
             <p className="text-xl md:text-2xl mb-8 opacity-90">
-              O ecossistema de inovação do Sertão Central Cearense
+              Comunidade de Startups do Sertão Central Cearense
             </p>
             <Button size="lg" asChild className="bg-background text-foreground hover:bg-background/90">
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">

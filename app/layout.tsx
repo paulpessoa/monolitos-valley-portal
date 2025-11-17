@@ -27,7 +27,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: 'Monólitos Valley - Ecossistema de Inovação do Sertão Central Cearense',
+  title: 'Monólitos Valley - Comunidade de Startups do Sertão Central Cearense',
   description: 'Comunidade de startups, inovação e oportunidades no Sertão Central Cearense. Conecte-se com empreendedores, participe de eventos e acesse recursos para crescer seu negócio.',
   keywords: ['startups', 'inovação', 'Ceará', 'Sertão Central', 'empreendedorismo', 'tecnologia', 'comunidade'],
   authors: [{ name: 'Monólitos Valley' }],
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     locale: 'pt_BR',
     url: 'https://monolitosvalley.com.br',
     siteName: 'Monólitos Valley',
-    title: 'Monólitos Valley - Ecossistema de Inovação do Sertão Central Cearense',
+    title: 'Monólitos Valley - Comunidade de Startups do Sertão Central Cearense',
     description: 'Comunidade de startups, inovação e oportunidades no Sertão Central Cearense',
     images: [
       {
