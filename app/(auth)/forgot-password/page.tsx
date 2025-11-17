@@ -22,7 +22,7 @@ export default function ForgotPasswordPage() {
 
         try {
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${window.location.origin}/reset-password`,
+                redirectTo: `${window.location.origin}/auth/callback?type=recovery`,
             })
 
             if (error) throw error
@@ -72,8 +72,8 @@ export default function ForgotPasswordPage() {
                     {message && (
                         <div
                             className={`mt-4 rounded-md p-3 text-sm ${message.type === 'success'
-                                    ? 'bg-green-50 text-green-800'
-                                    : 'bg-red-50 text-red-800'
+                                ? 'bg-green-50 text-green-800'
+                                : 'bg-red-50 text-red-800'
                                 }`}
                         >
                             {message.text}

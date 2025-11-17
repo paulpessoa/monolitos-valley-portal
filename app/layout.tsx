@@ -3,8 +3,10 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
+import { AuthRedirect } from '@/components/auth/AuthRedirect'
 import { createClient } from '@/lib/supabase/server'
 import { Toaster } from 'sonner'
+import { Suspense } from 'react'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,6 +36,9 @@ export default async function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Suspense fallback={null}>
+          <AuthRedirect />
+        </Suspense>
         <Toaster position="top-right" />
         <div className="flex min-h-screen flex-col">
           <Navbar user={user} />
