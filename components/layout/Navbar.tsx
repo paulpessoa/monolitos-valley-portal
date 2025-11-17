@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { User } from '@supabase/supabase-js'
 import { AuthButton } from './AuthButton'
 
@@ -18,10 +19,17 @@ export function Navbar({ user }: NavbarProps) {
 
     return (
         <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="container flex h-16 items-center">
+            <div className="container mx-auto px-4 flex h-16 items-center">
                 <div className="mr-4 flex">
                     <Link href="/" className="mr-6 flex items-center space-x-2">
-                        <span className="font-bold text-xl">Monólitos Valley</span>
+                        <Image
+                            src="/monolitos-valley-logo.svg"
+                            alt="Monólitos Valley"
+                            width={32}
+                            height={32}
+                            className="h-8 w-8"
+                        />
+                        <span className="font-bold text-lg hidden sm:inline">Monólitos Valley</span>
                     </Link>
                 </div>
                 <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
