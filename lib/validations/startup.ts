@@ -1,29 +1,25 @@
 import { z } from "zod"
 
 export const startupSchema = z.object({
-  name: z
+  name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
+  description: z
     .string()
-    .min(3, "Nome deve ter no mínimo 3 caracteres")
-    .max(100)
-    .optional(),
-  description: z.string().max(1000).optional().nullable(),
-  logo_url: z.string().url().optional().nullable(),
-  segmento: z.string().max(100).optional().nullable(),
-  modelo_monetizacao: z.string().max(500).optional().nullable(),
-  problema_abordado: z.string().max(1000).optional().nullable(),
-  solucao_oferecida: z.string().max(1000).optional().nullable(),
-  estagio_maturidade: z
-    .enum(["Ideação", "Validação", "Operação", "Tração", "Scale-up"])
-    .optional()
-    .nullable(),
-  programas_previos: z.string().max(500).optional().nullable(),
-  tecnologias_utilizadas: z.array(z.string()).optional().default([]),
-  links_premios_noticias: z.array(z.string().url()).optional().default([]),
-  publico_atende: z.string().max(500).optional().nullable(),
-  pitch_deck_url: z.string().url().optional().nullable(),
-  is_esg: z.boolean().default(false),
-  latitude: z.number().min(-90).max(90).optional().nullable(),
-  longitude: z.number().min(-180).max(180).optional().nullable()
+    .min(10, "Descrição deve ter pelo menos 10 caracteres"),
+  segmento: z.string().min(1, "Segmento é obrigatório"),
+  estagio_maturidade: z.enum(["ideia", "mvp", "tracao", "escala"]),
+  ano_fundacao: z.number().int().min(1900).max(new Date().getFullYear()),
+  website: z.string().url("URL inválida").optional().or(z.literal("")),
+  linkedin: z.string().url("URL inválida").optional().or(z.literal("")),
+  instagram: z.string().url("URL inválida").optional().or(z.literal("")),
+  cidade: z.string().min(1, "Cidade é obrigatória"),
+  estado: z.string().length(2, "Estado deve ter 2 caracteres"),
+  latitude: z.number().min(-90).max(90).optional(),
+  longitude: z.number().min(-180).max(180).optional(),
+  tecnologias: z.array(z.string()).optional(),
+  tem_esg: z.boolean().default(false),
+  detalhes_esg: z.string().optional(),
+  logo_url: z.string().url("URL inválida").optional().or(z.literal("")),
+  pitch_deck_url: z.string().url("URL inválida").optional().or(z.literal(""))
 })
 
-export type StartupUpdate = z.infer<typeof startupSchema>
+export type StartupFormData = z.infer<typeof startupSchema>

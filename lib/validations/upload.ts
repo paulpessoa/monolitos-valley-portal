@@ -9,7 +9,7 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/png",
   "image/webp"
 ]
-const ACCEPTED_PDF_TYPE = "application/pdf"
+const ACCEPTED_PDF_TYPES = ["application/pdf"]
 
 export const imageUploadSchema = z.object({
   file: z
@@ -20,21 +20,23 @@ export const imageUploadSchema = z.object({
     )
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
-      "Formato deve ser JPEG, PNG ou WebP"
+      "Apenas arquivos JPEG, PNG ou WebP são aceitos"
     ),
-  bucket: z.enum(["avatars", "logos", "events", "blog", "products"])
+  bucket: z.string(),
+  path: z.string().optional()
 })
 
 export const pdfUploadSchema = z.object({
   file: z
     .instanceof(File)
     .refine((file) => file.size <= MAX_PDF_SIZE, "PDF deve ter no máximo 10MB")
-    .refine((file) => file.type === ACCEPTED_PDF_TYPE, "Arquivo deve ser PDF"),
-  bucket: z.literal("pitch-decks")
+    .refine(
+      (file) => ACCEPTED_PDF_TYPES.includes(file.type),
+      "Apenas arquivos PDF são aceitos"
+    ),
+  bucket: z.string(),
+  path: z.string().optional()
 })
 
-export const uploadSchema = z.union([imageUploadSchema, pdfUploadSchema])
-
-export type ImageUpload = z.infer<typeof imageUploadSchema>
-export type PdfUpload = z.infer<typeof pdfUploadSchema>
-export type Upload = z.infer<typeof uploadSchema>
+export type ImageUploadData = z.infer<typeof imageUploadSchema>
+export type PdfUploadData = z.infer<typeof pdfUploadSchema>

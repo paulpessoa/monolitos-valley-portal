@@ -3,38 +3,37 @@ export interface Profile {
   email: string
   full_name: string | null
   avatar_url: string | null
+  bio: string | null
+  phone: string | null
+  linkedin: string | null
   role: string
   seeking_details: string | null
   created_at: string
   updated_at: string
 }
 
-export type EstagioMaturidade =
-  | "Ideação"
-  | "Validação"
-  | "Operação"
-  | "Tração"
-  | "Scale-up"
+export type EstagioMaturidade = "ideia" | "mvp" | "tracao" | "escala"
 
 export interface Startup {
   id: string
   owner_id: string
   name: string
-  description: string | null
+  description: string
   logo_url: string | null
-  segmento: string | null
-  modelo_monetizacao: string | null
-  problema_abordado: string | null
-  solucao_oferecida: string | null
-  estagio_maturidade: EstagioMaturidade | null
-  programas_previos: string | null
-  tecnologias_utilizadas: string[]
-  links_premios_noticias: string[]
-  publico_atende: string | null
-  pitch_deck_url: string | null
-  is_esg: boolean
+  segmento: string
+  estagio_maturidade: EstagioMaturidade
+  ano_fundacao: number
+  website: string | null
+  linkedin: string | null
+  instagram: string | null
+  cidade: string
+  estado: string
   latitude: number | null
   longitude: number | null
+  tecnologias: string[]
+  tem_esg: boolean
+  detalhes_esg: string | null
+  pitch_deck_url: string | null
   created_at: string
   updated_at: string
 }
