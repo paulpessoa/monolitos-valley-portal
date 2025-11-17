@@ -32,7 +32,7 @@ export async function GET(request: Request) {
       // Se for recovery, vai para reset-password
       if (type === "recovery" || type === "email_change") {
         return NextResponse.redirect(
-          new URL("/auth/reset-password", requestUrl.origin)
+          new URL("/reset-password", requestUrl.origin)
         )
       }
       // Se for magiclink, vai para o next ou profile
@@ -45,6 +45,6 @@ export async function GET(request: Request) {
   console.error("No valid auth params found:", { code, token_hash, type })
 
   return NextResponse.redirect(
-    new URL("/auth/login?error=authentication_failed", requestUrl.origin)
+    new URL("/login?error=authentication_failed", requestUrl.origin)
   )
 }

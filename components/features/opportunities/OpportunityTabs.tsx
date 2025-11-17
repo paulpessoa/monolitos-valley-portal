@@ -44,7 +44,7 @@ export function OpportunityTabs({ opportunities, isAuthenticated }: OpportunityT
                             <Lock className="w-4 h-4" />
                             <AlertDescription>
                                 Você precisa estar autenticado para visualizar {tab.label.toLowerCase()}.{' '}
-                                <Link href="/auth/login" className="underline font-medium">
+                                <Link href="/login" className="underline font-medium">
                                     Faça login
                                 </Link>{' '}
                                 para acessar.

@@ -29,7 +29,7 @@ export function AuthButton({ user }: AuthButtonProps) {
 
     if (!user) {
         return (
-            <Button onClick={() => router.push('/auth/login')} variant="default">
+            <Button onClick={() => router.push('/login')} variant="default">
                 Login
             </Button>
         )
