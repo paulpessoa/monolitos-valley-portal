@@ -7,8 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*.supabase.co"
       }
-    ]
-  }
+    ],
+    formats: ["image/webp"]
+  },
+  compress: true
 }
 
 export default nextConfig

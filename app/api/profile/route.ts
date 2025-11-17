@@ -18,11 +18,35 @@ export async function GET() {
     const serviceClient = await createServiceClient()
 
     // Fetch profile
-    const { data: profile, error: profileError } = await serviceClient
+    let { data: profile, error: profileError } = await serviceClient
       .from("profiles")
       .select("*")
       .eq("id", user.id)
-      .single()
+      .maybeSingle()
+
+    // If profile doesn't exist, create it
+    if (!profile && !profileError) {
+      const { data: newProfile, error: createError } = await serviceClient
+        .from("profiles")
+        .insert({
+          id: user.id,
+          email: user.email!,
+          full_name: user.user_metadata?.full_name || null,
+          avatar_url: user.user_metadata?.avatar_url || null
+        })
+        .select()
+        .single()
+
+      if (createError) {
+        console.error("Profile create error:", createError)
+        return NextResponse.json(
+          { error: "Erro ao criar perfil" },
+          { status: 500 }
+        )
+      }
+
+      profile = newProfile
+    }
 
     if (profileError) {
       console.error("Profile fetch error:", profileError)
