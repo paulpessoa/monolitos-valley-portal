@@ -25,19 +25,30 @@ export function MagicLinkCTA({ title, description, subtitle }: MagicLinkCTAProps
         setLoading(true)
 
         try {
-            const { error: err } = await supabase.auth.signInWithOtp({
+            // Log para debug
+            const redirectUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback?next=/profile`
+            console.log('🔗 Magic Link - Redirect URL:', redirectUrl)
+
+            const { data, error: err } = await supabase.auth.signInWithOtp({
                 email,
                 options: {
-                    emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback?next=/profile`,
+                    emailRedirectTo: redirectUrl,
+                    shouldCreateUser: true, // Garante que cria o usuário
                 },
             })
 
-            if (err) throw err
+            console.log('✅ Magic Link Response:', data)
+
+            if (err) {
+                console.error('❌ Magic Link Error:', err)
+                throw err
+            }
 
             setSuccess(true)
             setEmail('')
             setTimeout(() => setSuccess(false), 5000)
         } catch (err) {
+            console.error('❌ Catch Error:', err)
             setError(err instanceof Error ? err.message : 'Erro ao enviar email')
         } finally {
             setLoading(false)
