@@ -105,75 +105,109 @@ export async function PUT(request: NextRequest) {
 
     // Update profile if provided
     if (profileData) {
-      const validatedProfile = profileSchema.parse(profileData)
+      try {
+        const validatedProfile = profileSchema.parse(profileData)
 
-      const { data, error: profileError } = await serviceClient
-        .from("profiles")
-        .update(validatedProfile)
-        .eq("id", user.id)
-        .select()
-        .single()
+        const { data, error: profileError } = await serviceClient
+          .from("profiles")
+          .update(validatedProfile)
+          .eq("id", user.id)
+          .select()
+          .single()
 
-      if (profileError) {
-        console.error("Profile update error:", profileError)
+        if (profileError) {
+          console.error("Profile update error:", profileError)
+          return NextResponse.json(
+            { error: "Erro ao atualizar perfil" },
+            { status: 500 }
+          )
+        }
+
+        updatedProfile = data
+      } catch (validationError: any) {
+        const firstError = validationError.errors?.[0]
+        const friendlyMessage =
+          firstError?.message || "Dados do perfil inválidos"
+
+        console.error("❌ Profile validation error:", validationError.errors)
+
         return NextResponse.json(
-          { error: "Erro ao atualizar perfil" },
-          { status: 500 }
+          {
+            error: friendlyMessage,
+            field: firstError?.path?.[0],
+            details: validationError.errors
+          },
+          { status: 400 }
         )
       }
-
-      updatedProfile = data
     }
 
     // Update or create startup if provided
     if (startupData) {
-      const validatedStartup = startupSchema.parse(startupData)
+      try {
+        const validatedStartup = startupSchema.parse(startupData)
 
-      // Check if startup exists
-      const { data: existingStartup } = await serviceClient
-        .from("startups")
-        .select("id")
-        .eq("owner_id", user.id)
-        .maybeSingle()
-
-      if (existingStartup) {
-        // Update existing startup
-        const { data, error: startupError } = await serviceClient
+        // Check if startup exists
+        const { data: existingStartup } = await serviceClient
           .from("startups")
-          .update(validatedStartup)
+          .select("id")
           .eq("owner_id", user.id)
-          .select()
-          .single()
+          .maybeSingle()
 
-        if (startupError) {
-          console.error("Startup update error:", startupError)
-          return NextResponse.json(
-            { error: "Erro ao atualizar startup" },
-            { status: 500 }
-          )
+        if (existingStartup) {
+          // Update existing startup
+          const { data, error: startupError } = await serviceClient
+            .from("startups")
+            .update(validatedStartup)
+            .eq("owner_id", user.id)
+            .select()
+            .single()
+
+          if (startupError) {
+            console.error("Startup update error:", startupError)
+            return NextResponse.json(
+              { error: "Erro ao atualizar startup" },
+              { status: 500 }
+            )
+          }
+
+          updatedStartup = data
+        } else {
+          // Create new startup
+          const { data, error: startupError } = await serviceClient
+            .from("startups")
+            .insert({
+              ...validatedStartup,
+              owner_id: user.id
+            })
+            .select()
+            .single()
+
+          if (startupError) {
+            console.error("Startup create error:", startupError)
+            return NextResponse.json(
+              { error: "Erro ao criar startup" },
+              { status: 500 }
+            )
+          }
+
+          updatedStartup = data
         }
+      } catch (validationError: any) {
+        const firstError = validationError.errors?.[0]
+        const friendlyMessage =
+          firstError?.message || "Dados da startup inválidos"
 
-        updatedStartup = data
-      } else {
-        // Create new startup
-        const { data, error: startupError } = await serviceClient
-          .from("startups")
-          .insert({
-            ...validatedStartup,
-            owner_id: user.id
-          })
-          .select()
-          .single()
+        console.error("❌ Startup validation error:", validationError.errors)
 
-        if (startupError) {
-          console.error("Startup create error:", startupError)
-          return NextResponse.json(
-            { error: "Erro ao criar startup" },
-            { status: 500 }
-          )
-        }
-
-        updatedStartup = data
+        return NextResponse.json(
+          {
+            error: friendlyMessage,
+            field: firstError?.path?.[0],
+            details: validationError.errors
+          },
+          { status: 400 }
+        )
       }
     }
 
@@ -182,25 +216,7 @@ export async function PUT(request: NextRequest) {
       startup: updatedStartup
     })
   } catch (error) {
-    if (error instanceof Error && error.name === "ZodError") {
-      // Parse Zod errors para mensagens amigáveis
-      const zodError = error as any
-      const firstError = zodError.errors?.[0]
-      const friendlyMessage = firstError?.message || "Dados inválidos"
-
-      console.error("❌ Validation error:", zodError.errors)
-
-      return NextResponse.json(
-        {
-          error: friendlyMessage,
-          field: firstError?.path?.[0],
-          details: zodError.errors
-        },
-        { status: 400 }
-      )
-    }
-
-    console.error("Unexpected error:", error)
+    console.error("❌ Unexpected error:", error)
     return NextResponse.json(
       { error: "Erro interno do servidor" },
       { status: 500 }
