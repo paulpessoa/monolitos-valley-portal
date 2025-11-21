@@ -204,14 +204,16 @@ export default async function HomePage() {
       {events.length > 0 && (
         <section className="py-20 bg-stone-100">
           <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between mb-12">
-              <div>
-                <h2 className="text-4xl font-bold text-stone-900 mb-2">Próximos Eventos</h2>
-                <p className="text-stone-600">Participe dos nossos eventos e expanda sua rede de contatos</p>
+            <div className="mb-12">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-2">Próximos Eventos</h2>
+                  <p className="text-stone-600">Participe dos nossos eventos e expanda sua rede de contatos</p>
+                </div>
+                <Link href="/events" className="text-amber-600 hover:text-amber-700 font-semibold text-sm border border-amber-500 px-4 py-2 rounded-lg hover:bg-amber-50 transition-colors w-fit">
+                  Ver todos →
+                </Link>
               </div>
-              <Link href="/events" className="text-amber-600 hover:text-amber-700 font-semibold text-sm border border-amber-500 px-4 py-2 rounded-lg hover:bg-amber-50 transition-colors">
-                Ver todos →
-              </Link>
             </div>
             <EventCarousel events={events} />
           </div>
@@ -222,14 +224,16 @@ export default async function HomePage() {
       {startups.length > 0 && (
         <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between mb-12">
-              <div>
-                <h2 className="text-4xl font-bold text-stone-900 mb-2">Startups em Destaque</h2>
-                <p className="text-stone-600">Conheça as startups inovadoras que estão transformando o Sertão Central</p>
+            <div className="mb-12">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-2">Startups em Destaque</h2>
+                  <p className="text-stone-600">Conheça as startups inovadoras que estão transformando o Sertão Central</p>
+                </div>
+                <Link href="/startups" className="text-amber-600 hover:text-amber-700 font-semibold text-sm border border-amber-500 px-4 py-2 rounded-lg hover:bg-amber-50 transition-colors w-fit">
+                  Ver todas →
+                </Link>
               </div>
-              <Link href="/startups" className="text-amber-600 hover:text-amber-700 font-semibold text-sm border border-amber-500 px-4 py-2 rounded-lg hover:bg-amber-50 transition-colors">
-                Ver todas →
-              </Link>
             </div>
             <StartupGrid startups={startups} />
           </div>
@@ -282,8 +286,7 @@ export default async function HomePage() {
       <FAQ items={faqItems} />
 
       {/* CTA Final Section */}
-      <section id="cta" className="relative overflow-hidden bg-gradient-to-b from-stone-900 via-stone-800 to-stone-900 py-20 md:py-28">
-        {/* Background Pattern */}
+      {/* <section id="cta" className="relative overflow-hidden bg-gradient-to-b from-stone-900 via-stone-800 to-stone-900 py-20 md:py-28">
         <div className="absolute inset-0 opacity-10">
           <svg className="w-full h-full" viewBox="0 0 1200 300">
             <defs>
@@ -295,13 +298,13 @@ export default async function HomePage() {
           </svg>
         </div>
 
-        {/* <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 relative z-10">
           <MagicLinkCTA
             title="Pronto para transformar sua startup?"
             description="Junte-se a dezenas de empreenderoes e ajude a construir o futuro do Sertão Central Cearense hoje mesmo."
           />
-        </div> */}
-      </section>
+        </div>
+      </section> */}
     </div>
   )
 }

@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "ui-avatars.com"
+      },
+      {
+        protocol: "https",
+        hostname: "pedrodaniel.my.canva.site"
+      },
+      {
+        protocol: "https",
         hostname: "**"
       }
     ],

@@ -18,9 +18,10 @@ import { LogOut, User as UserIcon, Settings } from 'lucide-react'
 
 interface AuthButtonProps {
     user: User | null
+    buttonText?: string
 }
 
-export function AuthButton({ user: initialUser }: AuthButtonProps) {
+export function AuthButton({ user: initialUser, buttonText = 'Acesso de Membros' }: AuthButtonProps) {
     const router = useRouter()
     const supabase = createClient()
     const [user, setUser] = useState<User | null>(initialUser)
@@ -71,22 +72,16 @@ export function AuthButton({ user: initialUser }: AuthButtonProps) {
         router.refresh()
     }
 
-    if (!user) {
-        return (
-            <Button onClick={() => router.push('/login')} variant="default">
-                Login
-            </Button>
-        )
-    }
-
     if (loading) {
         return <Button variant="ghost" className="h-10 w-10 rounded-full animate-pulse" />
     }
 
     if (!user) {
         return (
-            <Button onClick={() => router.push('/login')} variant="default">
-                Login
+            <Button
+                onClick={() => router.push('/login')} variant="default"
+            >
+                {buttonText}
             </Button>
         )
     }
