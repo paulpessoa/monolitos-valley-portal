@@ -6,6 +6,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { AuthRedirect, AuthHashHandler } from '@/components/auth/AuthHandlers'
 import { CookieConsent } from '@/components/CookieConsent'
+import { Clarity } from '@/components/analytics/Clarity'
 import { createClient } from '@/lib/supabase/server'
 import { Toaster } from 'sonner'
 import { Suspense } from 'react'
@@ -82,6 +83,7 @@ export default async function RootLayout({
           <AuthRedirect />
         </Suspense>
         <AuthHashHandler />
+        <Clarity />
         <Toaster position="top-right" />
         <div className="flex min-h-screen flex-col">
           <Navbar user={user} />
