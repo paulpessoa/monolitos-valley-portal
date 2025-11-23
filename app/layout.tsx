@@ -7,6 +7,7 @@ import { Footer } from '@/components/layout/Footer'
 import { AuthRedirect, AuthHashHandler } from '@/components/auth/AuthHandlers'
 import { CookieConsent } from '@/components/CookieConsent'
 import { Clarity } from '@/components/analytics/Clarity'
+import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics'
 import { createClient } from '@/lib/supabase/server'
 import { Toaster } from 'sonner'
 import { Suspense } from 'react'
@@ -83,6 +84,7 @@ export default async function RootLayout({
           <AuthRedirect />
         </Suspense>
         <AuthHashHandler />
+        <GoogleAnalytics />
         <Clarity />
         <Toaster position="top-right" />
         <div className="flex min-h-screen flex-col">
