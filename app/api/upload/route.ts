@@ -107,9 +107,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Generate unique filename
+    // Generate unique filename with sanitization
     const fileExt = file.name.split(".").pop()
-    const fileName = `${user.id}/${Date.now()}.${fileExt}`
+    const timestamp = Date.now()
+    const randomStr = Math.random().toString(36).substring(2, 8)
+    // Sanitize: remove special characters and spaces
+    const sanitizedName = `${timestamp}-${randomStr}.${fileExt}`
+    const fileName = `${user.id}/${sanitizedName}`
 
     // Convert File to ArrayBuffer
     const arrayBuffer = await file.arrayBuffer()
