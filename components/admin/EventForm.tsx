@@ -49,17 +49,15 @@ export function EventForm({ onSuccess }: { onSuccess: () => void }) {
             const { data: { user } } = await supabase.auth.getUser()
             if (!user) throw new Error('Usuário não autenticado')
 
-            // Separar data e hora do datetime-local
-            const datetime = new Date(formData.event_datetime)
-            const date = datetime.toISOString().split('T')[0] // YYYY-MM-DD
-            const start_time = datetime.toTimeString().slice(0, 5) // HH:MM
+            // Converter datetime-local para ISO date
+            const date = formData.event_datetime.split('T')[0] // YYYY-MM-DD
+            const time = formData.event_datetime.split('T')[1] // HH:MM
 
             const { error } = await supabase.from('events').insert({
                 title: formData.title,
                 description: formData.description,
                 date: date,
-                start_time: start_time,
-                duration_minutes: parseInt(formData.duration_minutes),
+                start_time: time || null,
                 location: formData.location,
                 image_url: formData.image_url,
                 created_by: user.id,
