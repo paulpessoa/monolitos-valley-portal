@@ -56,7 +56,7 @@ export function EventForm({ onSuccess }: { onSuccess: () => void }) {
             const eventData: any = {
                 title: formData.title,
                 description: formData.description,
-                date: isoDate, // Data e hora completas
+                event_date: isoDate, // Data e hora completas
                 location: formData.location,
                 created_by: user.id,
                 approved: false,
