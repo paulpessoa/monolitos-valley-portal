@@ -1,6 +1,7 @@
 import { createClient, createServiceClient } from "@/lib/supabase/server"
 import { profileSchema } from "@/lib/validations/profile"
 import { startupSchema } from "@/lib/validations/startup"
+import { deleteStorageFileServer } from "@/lib/supabase/storage-server"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET() {
@@ -335,3 +336,78 @@ export async function PUT(request: NextRequest) {
     )
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const supabase = await createClient()
+    const {
+      data: { user },
+      error: authError
+    } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json({ error: "Não autenticado" }, { status: 401 })
+    }
+
+    const serviceClient = await createServiceClient()
+
+    // 1. Fetch startup to get files
+    const { data: startup, error: fetchError } = await serviceClient
+      .from("startups")
+      .select("id, logo_url, pitch_deck_url")
+      .eq("owner_id", user.id)
+      .maybeSingle()
+
+    if (fetchError) {
+      console.error("Error fetching startup for deletion:", fetchError)
+      return NextResponse.json({ error: "Erro ao buscar startup para exclusão" }, { status: 500 })
+    }
+
+    if (!startup) {
+      return NextResponse.json({ error: "Startup não encontrada" }, { status: 404 })
+    }
+
+    // 2. Fetch team members to get photos
+    const { data: teamMembers } = await serviceClient
+      .from("team_members")
+      .select("photo_url")
+      .eq("startup_id", startup.id)
+      
+    // 3. Delete files from storage
+    if (startup.logo_url) {
+      await deleteStorageFileServer("logos", startup.logo_url)
+    }
+    
+    if (startup.pitch_deck_url) {
+      await deleteStorageFileServer("pitch-decks", startup.pitch_deck_url)
+    }
+
+    if (teamMembers && teamMembers.length > 0) {
+      for (const member of teamMembers) {
+        if (member.photo_url) {
+          await deleteStorageFileServer("team-members", member.photo_url)
+        }
+      }
+    }
+
+    // 4. Delete the startup from the database (cascade will handle team members DB records)
+    const { error: deleteError } = await serviceClient
+      .from("startups")
+      .delete()
+      .eq("owner_id", user.id)
+
+    if (deleteError) {
+      console.error("Error deleting startup:", deleteError)
+      return NextResponse.json({ error: "Erro ao excluir startup" }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true, message: "Startup excluída com sucesso" })
+  } catch (error) {
+    console.error("❌ Unexpected error:", error)
+    return NextResponse.json(
+      { error: "Erro interno do servidor" },
+      { status: 500 }
+    )
+  }
+}
+

@@ -8,6 +8,17 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { useForm, Controller } from 'react-hook-form'
 import { Loader2, Upload, X } from 'lucide-react'
 import { toast } from 'sonner'
@@ -22,6 +33,7 @@ const LocationPicker = dynamic(
 interface StartupFormProps {
     startup?: Startup | null
     onSuccess?: () => void
+    isAdminEdit?: boolean
 }
 
 const SEGMENTOS = [
@@ -52,8 +64,9 @@ const ESTAGIOS = [
     { value: 'crescimento', label: 'Crescimento' },
 ] as const
 
-export function StartupForm({ startup, onSuccess }: StartupFormProps) {
+export function StartupForm({ startup, onSuccess, isAdminEdit = false }: StartupFormProps) {
     const [loading, setLoading] = useState(false)
+    const [deleting, setDeleting] = useState(false)
     const [uploadingLogo, setUploadingLogo] = useState(false)
     const [uploadingPitch, setUploadingPitch] = useState(false)
     const [logoUrl, setLogoUrl] = useState(startup?.logo_url || '')
@@ -108,8 +121,8 @@ export function StartupForm({ startup, onSuccess }: StartupFormProps) {
             setLogoUrl(data.url)
 
             // Save logo immediately
-            const saveRes = await fetch('/api/profile', {
-                method: 'PUT',
+            const saveRes = await fetch(isAdminEdit && startup?.id ? `/api/startups/${startup.id}` : '/api/profile', {
+                method: isAdminEdit ? 'PUT' : 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     startup: { logo_url: data.url },
@@ -151,8 +164,8 @@ export function StartupForm({ startup, onSuccess }: StartupFormProps) {
             setPitchDeckUrl(data.url)
 
             // Save pitch deck immediately
-            const saveRes = await fetch('/api/profile', {
-                method: 'PUT',
+            const saveRes = await fetch(isAdminEdit && startup?.id ? `/api/startups/${startup.id}` : '/api/profile', {
+                method: isAdminEdit ? 'PUT' : 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     startup: { pitch_deck_url: data.url },
@@ -201,8 +214,8 @@ export function StartupForm({ startup, onSuccess }: StartupFormProps) {
                 cnpj: data.cnpj || null,
             }
 
-            const res = await fetch('/api/profile', {
-                method: 'PUT',
+            const res = await fetch(isAdminEdit && startup?.id ? `/api/startups/${startup.id}` : '/api/profile', {
+                method: isAdminEdit ? 'PUT' : 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ startup: startupData }),
             })
@@ -218,6 +231,31 @@ export function StartupForm({ startup, onSuccess }: StartupFormProps) {
             console.error(error)
         } finally {
             setLoading(false)
+        }
+    }
+
+    const handleDelete = async () => {
+        setDeleting(true)
+        try {
+            const res = await fetch(isAdminEdit && startup?.id ? `/api/startups/${startup.id}` : '/api/profile', {
+                method: 'DELETE',
+            })
+
+            if (!res.ok) {
+                throw new Error('Erro ao excluir startup')
+            }
+
+            toast.success('Startup excluída com sucesso!')
+            if (isAdminEdit && typeof window !== 'undefined') {
+                window.location.href = '/admin'
+            } else {
+                onSuccess?.()
+            }
+        } catch (error) {
+            toast.error('Erro ao excluir startup')
+            console.error(error)
+        } finally {
+            setDeleting(false)
         }
     }
 
@@ -525,10 +563,38 @@ export function StartupForm({ startup, onSuccess }: StartupFormProps) {
                 }}
             />
 
-            <Button type="submit" disabled={loading} className="w-full">
-                {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                Salvar Startup
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t">
+                <Button type="submit" disabled={loading || deleting} className="flex-1">
+                    {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                    Salvar Startup
+                </Button>
+
+                {startup && (
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="destructive" type="button" disabled={loading || deleting}>
+                                {deleting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                                Excluir Startup
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Você tem certeza absoluta?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Esta ação não pode ser desfeita. Isso excluirá permanentemente o cadastro da startup,
+                                    incluindo logo, pitch deck e todos os membros da equipe.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                    Sim, excluir startup
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                )}
+            </div>
         </form>
     )
 }

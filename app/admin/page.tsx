@@ -24,6 +24,7 @@ interface PendingItem {
 export default function AdminPage() {
     const [loading, setLoading] = useState(true)
     const [isAdmin, setIsAdmin] = useState(false)
+    const [viewMode, setViewMode] = useState<'pending' | 'approved'>('pending')
     const [pending, setPending] = useState<{
         blog: PendingItem[]
         events: PendingItem[]
@@ -32,12 +33,17 @@ export default function AdminPage() {
         products: PendingItem[]
         startups: PendingItem[]
     }>({
-        blog: [],
-        events: [],
-        opportunities: [],
-        partners: [],
-        products: [],
-        startups: [],
+        blog: [], events: [], opportunities: [], partners: [], products: [], startups: [],
+    })
+    const [approved, setApproved] = useState<{
+        blog: PendingItem[]
+        events: PendingItem[]
+        opportunities: PendingItem[]
+        partners: PendingItem[]
+        products: PendingItem[]
+        startups: PendingItem[]
+    }>({
+        blog: [], events: [], opportunities: [], partners: [], products: [], startups: [],
     })
     const router = useRouter()
     const supabase = createClient()
@@ -80,7 +86,7 @@ export default function AdminPage() {
     async function fetchPending() {
         const supabase = createClient()
 
-        const [blog, events, opportunities, partners, products, startups] = await Promise.all([
+        const [blogP, eventsP, oppsP, partnersP, productsP, startupsP] = await Promise.all([
             supabase.from('blog_posts').select('id, title, created_at').eq('approved', false),
             supabase.from('events').select('id, title, created_at').eq('approved', false),
             supabase.from('opportunities').select('id, title, type, created_at').eq('approved', false),
@@ -89,13 +95,34 @@ export default function AdminPage() {
             supabase.from('startups').select('id, name, created_at').eq('approved', false),
         ])
 
+        const [blogA, eventsA, oppsA, partnersA, productsA, startupsA] = await Promise.all([
+            supabase.from('blog_posts').select('id, title, created_at').eq('approved', true),
+            supabase.from('events').select('id, title, created_at').eq('approved', true),
+            supabase.from('opportunities').select('id, title, type, created_at').eq('approved', true),
+            supabase.from('partners').select('id, name, created_at').eq('approved', true),
+            supabase.from('store_products').select('id, name, created_at').eq('approved', true),
+            supabase.from('startups').select('id, name, created_at').eq('approved', true),
+        ])
+
+        const mapData = (data: any[] | null, typeStr: string, nameField: string = 'title') => 
+            (data || []).map((item: any) => ({ ...item, title: item[nameField], itemType: typeStr }))
+
         setPending({
-            blog: (blog.data || []).map((item: any) => ({ ...item, title: item.title, itemType: 'blog' })),
-            events: (events.data || []).map((item: any) => ({ ...item, title: item.title, itemType: 'event' })),
-            opportunities: (opportunities.data || []).map((item: any) => ({ ...item, title: item.title, type: item.type, itemType: 'opportunity' })),
-            partners: (partners.data || []).map((item: any) => ({ ...item, title: item.name, itemType: 'partner' })),
-            products: (products.data || []).map((item: any) => ({ ...item, title: item.name, itemType: 'product' })),
-            startups: (startups.data || []).map((item: any) => ({ ...item, title: item.name, itemType: 'startup' })),
+            blog: mapData(blogP.data, 'blog'),
+            events: mapData(eventsP.data, 'event'),
+            opportunities: mapData(oppsP.data, 'opportunity'),
+            partners: mapData(partnersP.data, 'partner', 'name'),
+            products: mapData(productsP.data, 'product', 'name'),
+            startups: mapData(startupsP.data, 'startup', 'name'),
+        })
+
+        setApproved({
+            blog: mapData(blogA.data, 'blog'),
+            events: mapData(eventsA.data, 'event'),
+            opportunities: mapData(oppsA.data, 'opportunity'),
+            partners: mapData(partnersA.data, 'partner', 'name'),
+            products: mapData(productsA.data, 'product', 'name'),
+            startups: mapData(startupsA.data, 'startup', 'name'),
         })
     }
 
@@ -146,14 +173,31 @@ export default function AdminPage() {
     if (!isAdmin) return null
 
     const totalPending = Object.values(pending).reduce((acc, items) => acc + items.length, 0)
+    const currentData = viewMode === 'pending' ? pending : approved
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <div className="mb-8">
-                <h1 className="text-4xl font-bold mb-2">Painel de Administração</h1>
-                <p className="text-muted-foreground">
-                    {totalPending} {totalPending === 1 ? 'item pendente' : 'itens pendentes'} de aprovação
-                </p>
+            <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-4xl font-bold mb-2">Painel de Administração</h1>
+                    <p className="text-muted-foreground">
+                        {totalPending} {totalPending === 1 ? 'item pendente' : 'itens pendentes'} de aprovação
+                    </p>
+                </div>
+                <div className="flex gap-2">
+                    <Button 
+                        variant={viewMode === 'pending' ? 'default' : 'outline'} 
+                        onClick={() => setViewMode('pending')}
+                    >
+                        Pendentes
+                    </Button>
+                    <Button 
+                        variant={viewMode === 'approved' ? 'default' : 'outline'} 
+                        onClick={() => setViewMode('approved')}
+                    >
+                        Aprovados
+                    </Button>
+                </div>
             </div>
 
             <Tabs defaultValue="create" className="w-full">
@@ -161,22 +205,22 @@ export default function AdminPage() {
                     <TabsList className="flex-wrap h-auto">
                         <TabsTrigger value="create">Criar Conteúdo</TabsTrigger>
                         <TabsTrigger value="blog">
-                            Blog {pending.blog.length > 0 && <Badge className="ml-2">{pending.blog.length}</Badge>}
+                            Blog {currentData.blog.length > 0 && <Badge className="ml-2">{currentData.blog.length}</Badge>}
                         </TabsTrigger>
                         <TabsTrigger value="events">
-                            Eventos {pending.events.length > 0 && <Badge className="ml-2">{pending.events.length}</Badge>}
+                            Eventos {currentData.events.length > 0 && <Badge className="ml-2">{currentData.events.length}</Badge>}
                         </TabsTrigger>
                         <TabsTrigger value="opportunities">
-                            Oportunidades {pending.opportunities.length > 0 && <Badge className="ml-2">{pending.opportunities.length}</Badge>}
+                            Oportunidades {currentData.opportunities.length > 0 && <Badge className="ml-2">{currentData.opportunities.length}</Badge>}
                         </TabsTrigger>
                         <TabsTrigger value="partners">
-                            Parceiros {pending.partners.length > 0 && <Badge className="ml-2">{pending.partners.length}</Badge>}
+                            Parceiros {currentData.partners.length > 0 && <Badge className="ml-2">{currentData.partners.length}</Badge>}
                         </TabsTrigger>
                         <TabsTrigger value="products">
-                            Produtos {pending.products.length > 0 && <Badge className="ml-2">{pending.products.length}</Badge>}
+                            Produtos {currentData.products.length > 0 && <Badge className="ml-2">{currentData.products.length}</Badge>}
                         </TabsTrigger>
                         <TabsTrigger value="startups">
-                            Startups {pending.startups.length > 0 && <Badge className="ml-2">{pending.startups.length}</Badge>}
+                            Startups {currentData.startups.length > 0 && <Badge className="ml-2">{currentData.startups.length}</Badge>}
                         </TabsTrigger>
                     </TabsList>
                 </div>
@@ -190,12 +234,12 @@ export default function AdminPage() {
                     </div>
                 </TabsContent>
 
-                {Object.entries(pending).map(([key, items]) => (
+                {Object.entries(currentData).map(([key, items]) => (
                     <TabsContent key={key} value={key} className="mt-6">
                         {items.length === 0 ? (
                             <Card>
                                 <CardContent className="py-12 text-center">
-                                    <p className="text-muted-foreground">Nenhum item pendente</p>
+                                    <p className="text-muted-foreground">Nenhum item {viewMode === 'pending' ? 'pendente' : 'aprovado'}</p>
                                 </CardContent>
                             </Card>
                         ) : (
@@ -227,6 +271,7 @@ export default function AdminPage() {
                                                             opportunities: `/admin/edit/opportunity/${item.id}`,
                                                             partners: `/admin/edit/partner/${item.id}`,
                                                             products: `/admin/edit/product/${item.id}`,
+                                                            startups: `/admin/edit/startup/${item.id}`,
                                                         }
                                                         router.push(editRoutes[key] || '/')
                                                     }}
@@ -234,34 +279,46 @@ export default function AdminPage() {
                                                     <Edit className="h-4 w-4 mr-2" />
                                                     Editar
                                                 </Button>
-                                                <Button
-                                                    size="sm"
-                                                    onClick={() => {
-                                                        const tableMap: Record<string, string> = {
-                                                            blog: 'blog_posts',
-                                                            products: 'store_products',
-                                                        }
-                                                        const table = tableMap[key] || key
-                                                        handleApprove(item.id, table)
-                                                    }}
-                                                >
-                                                    <Check className="h-4 w-4 mr-2" />
-                                                    Aprovar
-                                                </Button>
+                                                {viewMode === 'pending' && (
+                                                    <Button
+                                                        size="sm"
+                                                        onClick={() => {
+                                                            const tableMap: Record<string, string> = {
+                                                                blog: 'blog_posts',
+                                                                products: 'store_products',
+                                                            }
+                                                            const table = tableMap[key] || key
+                                                            handleApprove(item.id, table)
+                                                        }}
+                                                    >
+                                                        <Check className="h-4 w-4 mr-2" />
+                                                        Aprovar
+                                                    </Button>
+                                                )}
                                                 <Button
                                                     size="sm"
                                                     variant="destructive"
                                                     onClick={() => {
-                                                        const tableMap: Record<string, string> = {
-                                                            blog: 'blog_posts',
-                                                            products: 'store_products',
+                                                        if(key === 'startups' || key === 'blog') {
+                                                            // For Startups and Blog, we use their API to handle storage cascade deletion
+                                                            fetch(`/api/${key === 'startups' ? 'startups' : 'admin/blog-posts'}/${item.id}`, { method: 'DELETE' })
+                                                                .then(() => {
+                                                                    toast.success('Excluído com sucesso')
+                                                                    fetchPending()
+                                                                }).catch(() => toast.error('Erro ao excluir'))
+                                                        } else {
+                                                            // Regular delete for other tables
+                                                            const tableMap: Record<string, string> = {
+                                                                blog: 'blog_posts',
+                                                                products: 'store_products',
+                                                            }
+                                                            const table = tableMap[key] || key
+                                                            handleReject(item.id, table)
                                                         }
-                                                        const table = tableMap[key] || key
-                                                        handleReject(item.id, table)
                                                     }}
                                                 >
                                                     <X className="h-4 w-4 mr-2" />
-                                                    Rejeitar
+                                                    {viewMode === 'pending' ? 'Rejeitar' : 'Excluir'}
                                                 </Button>
                                             </div>
                                         </CardContent>
