@@ -231,10 +231,6 @@ https://seu-dominio.vercel.app
 https://seu-dominio.vercel.app/auth/callback
 ```
 
-## 📝 Licença
-
-Este projeto é privado e pertence à comunidade Monólitos Valley.
-
 ## 🤝 Contribuindo
 
 1. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
