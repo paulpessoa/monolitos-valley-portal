@@ -289,6 +289,7 @@ export default function StartupPageContent({ slug }: { slug: string }) {
                         </div>
                     )}
                 </div>
+                </div>
 
                 {teamMembers.length > 0 && (
                     <div className="bg-white rounded-xl shadow-sm border border-stone-200 p-8">
