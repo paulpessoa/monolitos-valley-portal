@@ -24,6 +24,7 @@ import { Loader2, Upload, X } from 'lucide-react'
 import { toast } from 'sonner'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
+import { uploadFileAction } from '@/lib/actions/upload'
 
 const LocationPicker = dynamic(
     () => import('./LocationPicker').then((mod) => ({ default: mod.LocationPicker })),
@@ -110,15 +111,11 @@ export function StartupForm({ startup, onSuccess, isAdminEdit = false }: Startup
             formData.append('file', file)
             formData.append('bucket', 'logos')
 
-            const res = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            })
+            const result = await uploadFileAction(formData)
 
-            if (!res.ok) throw new Error('Erro ao fazer upload')
+            if (result.error) throw new Error(result.error)
 
-            const data = await res.json()
-            setLogoUrl(data.url)
+            setLogoUrl(result.url!)
             toast.success('Logo enviado com sucesso!')
         } catch (error) {
             toast.error('Erro ao enviar logo')
@@ -138,15 +135,11 @@ export function StartupForm({ startup, onSuccess, isAdminEdit = false }: Startup
             formData.append('file', file)
             formData.append('bucket', 'pitch-decks')
 
-            const res = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            })
+            const result = await uploadFileAction(formData)
 
-            if (!res.ok) throw new Error('Erro ao fazer upload')
+            if (result.error) throw new Error(result.error)
 
-            const data = await res.json()
-            setPitchDeckUrl(data.url)
+            setPitchDeckUrl(result.url!)
             toast.success('Pitch deck enviado com sucesso!')
         } catch (error) {
             toast.error('Erro ao enviar pitch deck')

@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Plus, Trash2, Upload, Loader2 } from 'lucide-react'
 import Image from 'next/image'
+import { uploadFileAction } from '@/lib/actions/upload'
 
 interface TeamMembersFormProps {
     startupId: string
@@ -41,15 +42,11 @@ export function TeamMembersForm({ startupId, members, onMembersChange }: TeamMem
             formData.append('file', file)
             formData.append('bucket', 'team-members')
 
-            const res = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            })
+            const result = await uploadFileAction(formData)
 
-            if (!res.ok) throw new Error('Erro ao fazer upload')
+            if (result.error) throw new Error(result.error)
 
-            const data = await res.json()
-            setPhotoUrl(data.url)
+            setPhotoUrl(result.url!)
         } catch (error) {
             console.error('Error uploading photo:', error)
             alert('Erro ao enviar foto')

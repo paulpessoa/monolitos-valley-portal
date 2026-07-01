@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Upload, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
+import { uploadFileAction } from '@/lib/actions/upload'
 import Image from 'next/image'
 
 interface AvatarUploadProps {
@@ -48,17 +49,13 @@ export function AvatarUpload({ currentUrl, userName, onUploadComplete }: AvatarU
             formData.append('file', file)
             formData.append('bucket', 'avatars')
 
-            const res = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            })
+            const result = await uploadFileAction(formData)
 
-            if (!res.ok) {
-                throw new Error('Erro ao fazer upload')
+            if (result.error) {
+                throw new Error(result.error)
             }
 
-            const data = await res.json()
-            onUploadComplete(data.url)
+            onUploadComplete(result.url!)
             toast.success('Avatar atualizado com sucesso!')
         } catch (error) {
             toast.error('Erro ao fazer upload da imagem')
