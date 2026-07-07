@@ -108,19 +108,19 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Verify if current user is admin
+    const serviceClient = await createServiceClient()
+    const { data: profile } = await serviceClient
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single()
+    const isAdmin = profile?.role === "admin"
+
     // Determine target folder prefix
     let targetFolder = user.id
-    if (profileId && profileId !== user.id) {
-      // Verify if current user is admin
-      const serviceClient = await createServiceClient()
-      const { data: profile } = await serviceClient
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .single()
-      if (profile?.role === "admin") {
-        targetFolder = profileId
-      }
+    if (profileId && profileId !== user.id && isAdmin) {
+      targetFolder = profileId
     }
 
     // Generate unique filename with sanitization
@@ -135,8 +135,9 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
 
-    // Upload to Supabase Storage
-    const { data, error: uploadError } = await supabase.storage
+    // Upload to Supabase Storage - Use serviceClient if uploader is admin to bypass Storage RLS
+    const storageClient = isAdmin ? serviceClient : supabase
+    const { data, error: uploadError } = await storageClient.storage
       .from(bucket)
       .upload(fileName, buffer, {
         contentType: file.type,
@@ -151,10 +152,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get public URL
+    // Get public URL using the same storage client
     const {
       data: { publicUrl }
-    } = supabase.storage.from(bucket).getPublicUrl(data.path)
+    } = storageClient.storage.from(bucket).getPublicUrl(data.path)
 
     return NextResponse.json(
       {
