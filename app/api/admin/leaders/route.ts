@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { role_title, startup_name, linkedin_url, instagram_url, profile_id, avatar_url } = body
+    const { role_title, startup_name, linkedin_url, instagram_url, profile_id, avatar_url, dedicated_hours } = body
 
     if (!profile_id || !role_title) {
       return NextResponse.json({ error: "Perfil e cargo são obrigatórios" }, { status: 400 })
@@ -78,6 +78,9 @@ export async function POST(request: NextRequest) {
         linkedin_url: linkedin_url || null,
         instagram_url: instagram_url || null,
         profile_id,
+        dedicated_hours: dedicated_hours || 0,
+        hours_approved: false,
+        approved_by: [],
         checklist: [],
         monthly_engagement: []
       })

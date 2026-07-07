@@ -148,6 +148,9 @@ export interface CommunityLeader {
   startup_name: string | null
   linkedin_url: string | null
   instagram_url: string | null
+  dedicated_hours: number
+  hours_approved: boolean
+  approved_by: string[] // Array of UUIDs representing validator profile IDs
   checklist: string[] // Array of completed task IDs
   monthly_engagement: {
     month: string // e.g. "2026-07"

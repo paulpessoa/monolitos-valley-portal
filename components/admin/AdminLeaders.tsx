@@ -9,7 +9,8 @@ import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { 
     Users, Plus, Trash2, Edit2, CheckCircle2, Circle, 
-    Linkedin, Instagram, Sparkles, Target, Loader2, Image as ImageIcon
+    Linkedin, Instagram, Sparkles, Target, Loader2, Image as ImageIcon,
+    FileSpreadsheet, Award, ShieldCheck, Clock
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { CommunityLeader } from '@/types/database'
@@ -20,6 +21,7 @@ interface ProfileOption {
     full_name: string | null
     email: string
     avatar_url?: string | null
+    role?: string
 }
 
 const CHECKLIST_ITEMS = [
@@ -52,7 +54,8 @@ export function AdminLeaders() {
         linkedin_url: '',
         instagram_url: '',
         photo_url: '',
-        profile_id: ''
+        profile_id: '',
+        dedicated_hours: 0
     })
 
     useEffect(() => {
@@ -98,7 +101,8 @@ export function AdminLeaders() {
             linkedin_url: '',
             instagram_url: '',
             photo_url: '',
-            profile_id: ''
+            profile_id: '',
+            dedicated_hours: 0
         })
         setIsDialogOpen(true)
     }
@@ -112,7 +116,8 @@ export function AdminLeaders() {
             linkedin_url: leader.linkedin_url || '',
             instagram_url: leader.instagram_url || '',
             photo_url: leader.profiles?.avatar_url || '',
-            profile_id: leader.profile_id
+            profile_id: leader.profile_id,
+            dedicated_hours: leader.dedicated_hours || 0
         })
         setIsDialogOpen(true)
     }
@@ -165,7 +170,8 @@ export function AdminLeaders() {
                 linkedin_url: formData.linkedin_url || null,
                 instagram_url: formData.instagram_url || null,
                 profile_id: formData.profile_id,
-                avatar_url: formData.photo_url || undefined
+                avatar_url: formData.photo_url || undefined,
+                dedicated_hours: Number(formData.dedicated_hours)
             }
 
             const res = await fetch(url, {
@@ -224,6 +230,58 @@ export function AdminLeaders() {
         }
     }
 
+    const handleUpdateHoursDirect = async (leader: CommunityLeader, hours: number) => {
+        try {
+            const res = await fetch(`/api/admin/leaders/${leader.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ dedicated_hours: hours })
+            })
+            const data = await res.json()
+            if (res.ok) {
+                setLeaders(leaders.map(l => l.id === leader.id ? data.data : l))
+                if (selectedLeader?.id === leader.id) {
+                    setSelectedLeader(data.data)
+                }
+                toast.success("Horas dedicadas atualizadas!")
+            }
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    const handleToggleValidator = async (leader: CommunityLeader, adminId: string) => {
+        const alreadySigned = leader.approved_by?.includes(adminId) || false
+        const updatedValidators = alreadySigned
+            ? (leader.approved_by || []).filter(id => id !== adminId)
+            : [...(leader.approved_by || []), adminId]
+
+        const approved = updatedValidators.length >= 2
+
+        try {
+            const res = await fetch(`/api/admin/leaders/${leader.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    approved_by: updatedValidators,
+                    hours_approved: approved 
+                })
+            })
+            const data = await res.json()
+            if (res.ok) {
+                setLeaders(leaders.map(l => l.id === leader.id ? data.data : l))
+                if (selectedLeader?.id === leader.id) {
+                    setSelectedLeader(data.data)
+                }
+                toast.success(alreadySigned ? "Assinatura removida" : "Horas validadas com sucesso!")
+            } else {
+                toast.error("Erro ao atualizar validação")
+            }
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
     const handleDeleteLeader = async (leaderId: string) => {
         if (!confirm("Tem certeza que deseja remover esta liderança?")) return
         try {
@@ -240,7 +298,44 @@ export function AdminLeaders() {
         }
     }
 
+    const handleExportCSV = () => {
+        const headers = ["Nome", "E-mail", "Cargo", "Startup", "Horas Dedicadas", "Validação Concluída", "Validadores (Assinaturas)", "Checklist Concluidos"]
+        const rows = leaders.map(leader => {
+            const fullName = leader.profiles?.full_name || 'Sem nome'
+            const email = leader.profiles?.email || 'Sem e-mail'
+            const role = leader.role_title
+            const startup = leader.startup_name || 'Nenhuma'
+            const hours = leader.dedicated_hours || 0
+            const approved = leader.hours_approved ? 'Sim' : 'Não'
+            const validatorsNames = leader.approved_by
+                ?.map(id => profiles.find(p => p.id === id)?.full_name || 'Admin')
+                .join('; ') || 'Nenhum'
+            const checklistCount = leader.checklist?.length || 0
+            return [
+                `"${fullName}"`,
+                `"${email}"`,
+                `"${role}"`,
+                `"${startup}"`,
+                hours,
+                `"${approved}"`,
+                `"${validatorsNames}"`,
+                `${checklistCount}/${CHECKLIST_ITEMS.length}`
+            ]
+        })
+        const csvContent = "\uFEFF" + [headers.join(','), ...rows.map(r => r.join(','))].join('\n')
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement("a")
+        link.setAttribute("href", url)
+        link.setAttribute("download", `liderancas-relatorio-horas-${new Date().toISOString().slice(0,10)}.csv`)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        toast.success("Relatório de Horas exportado com sucesso!")
+    }
+
     const selectedUser = profiles.find(p => p.id === formData.profile_id)
+    const adminProfiles = profiles.filter(p => p.role === 'admin')
 
     return (
         <div className="space-y-6">
@@ -248,16 +343,26 @@ export function AdminLeaders() {
                 <div>
                     <h2 className="text-2xl font-bold tracking-tight">Lideranças da Comunidade</h2>
                     <p className="text-muted-foreground text-sm">
-                        Gerencie os líderes voluntários e acompanhe suas tarefas práticas de mercado.
+                        Gerencie os líderes voluntários, acompanhe suas tarefas práticas de mercado e certifique suas horas.
                     </p>
                 </div>
-                <Button 
-                    onClick={handleOpenCreate}
-                    className="bg-[#F2CB05] hover:bg-[#d4b304] text-stone-900 font-semibold gap-2"
-                >
-                    <Plus className="h-4 w-4" />
-                    <span>Adicionar Líder</span>
-                </Button>
+                <div className="flex gap-2">
+                    <Button 
+                        onClick={handleExportCSV}
+                        variant="outline"
+                        className="gap-2 border-stone-200 hover:bg-stone-50 text-stone-700"
+                    >
+                        <FileSpreadsheet className="h-4 w-4 text-emerald-600" />
+                        <span>Exportar CSV</span>
+                    </Button>
+                    <Button 
+                        onClick={handleOpenCreate}
+                        className="bg-[#F2CB05] hover:bg-[#d4b304] text-stone-900 font-semibold gap-2"
+                    >
+                        <Plus className="h-4 w-4" />
+                        <span>Adicionar Líder</span>
+                    </Button>
+                </div>
             </div>
 
             {leaders.length === 0 ? (
@@ -277,7 +382,8 @@ export function AdminLeaders() {
                                     <th className="px-6 py-4">Nome</th>
                                     <th className="px-6 py-4">Cargo / Função</th>
                                     <th className="px-6 py-4">Startup</th>
-                                    <th className="px-6 py-4">Progresso Checklist</th>
+                                    <th className="px-6 py-4">Horas Dedicadas</th>
+                                    <th className="px-6 py-4">Status Certificado</th>
                                     <th className="px-6 py-4 text-right">Ações</th>
                                 </tr>
                             </thead>
@@ -334,14 +440,27 @@ export function AdminLeaders() {
                                                 )}
                                             </td>
 
-                                            {/* Checklist Progress */}
+                                            {/* Hours */}
                                             <td className="px-6 py-4">
-                                                <div className="flex items-center gap-3 w-40">
-                                                    <div className="flex-1 bg-stone-100 rounded-full h-1.5 overflow-hidden border border-stone-200/40">
-                                                        <div className="bg-[#F2CB05] h-full rounded-full transition-all duration-300" style={{ width: `${pct}%` }}></div>
-                                                    </div>
-                                                    <span className="font-bold text-[10px] text-stone-500 whitespace-nowrap">{completedCount}/{totalCount}</span>
+                                                <div className="flex items-center gap-1.5 font-bold text-stone-700">
+                                                    <Clock className="w-3.5 h-3.5 text-stone-400" />
+                                                    <span>{leader.dedicated_hours || 0} horas</span>
                                                 </div>
+                                            </td>
+
+                                            {/* Certificado Approval Status */}
+                                            <td className="px-6 py-4">
+                                                {leader.hours_approved ? (
+                                                    <Badge className="bg-green-50 text-green-700 border-green-200 hover:bg-green-100/50 font-bold flex items-center gap-1 w-fit">
+                                                        <Award className="w-3 h-3 text-green-600" />
+                                                        <span>Aprovado</span>
+                                                    </Badge>
+                                                ) : (
+                                                    <Badge variant="outline" className="bg-stone-50/50 text-stone-500 font-semibold flex items-center gap-1 w-fit">
+                                                        <ShieldCheck className="w-3 h-3 text-stone-400" />
+                                                        <span>Aguardando ({leader.approved_by?.length || 0}/2)</span>
+                                                    </Badge>
+                                                )}
                                             </td>
 
                                             {/* Actions */}
@@ -468,6 +587,17 @@ export function AdminLeaders() {
                             />
                         </div>
                         <div className="grid gap-2">
+                            <Label htmlFor="dedicated_hours">Horas de Atividade Dedicadas</Label>
+                            <Input
+                                id="dedicated_hours"
+                                type="number"
+                                min="0"
+                                value={formData.dedicated_hours}
+                                onChange={e => setFormData({ ...formData, dedicated_hours: Number(e.target.value) })}
+                                placeholder="Ex: 40"
+                            />
+                        </div>
+                        <div className="grid gap-2">
                             <Label htmlFor="linkedin_url">LinkedIn URL (Opcional)</Label>
                             <Input
                                 id="linkedin_url"
@@ -526,6 +656,73 @@ export function AdminLeaders() {
                                     <div>
                                         <p className="font-semibold text-stone-500">E-mail</p>
                                         <p className="font-medium text-stone-900 truncate">{selectedLeader.profiles?.email || 'Não informado'}</p>
+                                    </div>
+                                </div>
+
+                                {/* Seção de Horas & Validação de Certificado */}
+                                <div className="border rounded-lg p-4 bg-amber-50/20 border-amber-200/60 space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-1.5">
+                                            <Award className="h-4.5 w-4.5 text-[#F2CB05]" />
+                                            <h4 className="text-sm font-bold text-stone-900">Horas Complementares & Certificado</h4>
+                                        </div>
+                                        {selectedLeader.hours_approved ? (
+                                            <Badge className="bg-green-100 text-green-800 border border-green-200 font-bold">
+                                                Aprovado para Emissão
+                                            </Badge>
+                                        ) : (
+                                            <Badge variant="outline" className="bg-stone-100 text-stone-600 border-stone-200 font-bold">
+                                                Aguardando Assinaturas ({selectedLeader.approved_by?.length || 0}/2)
+                                            </Badge>
+                                        )}
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4 items-center">
+                                        <div className="space-y-1">
+                                            <Label htmlFor="dedicated_hours_modal" className="text-xs font-semibold text-stone-500">Total de Horas Dedicadas</Label>
+                                            <div className="flex gap-2 items-center">
+                                                <Input
+                                                    id="dedicated_hours_modal"
+                                                    type="number"
+                                                    min="0"
+                                                    className="h-8 text-xs font-bold w-24 bg-white"
+                                                    defaultValue={selectedLeader.dedicated_hours || 0}
+                                                    onBlur={(e) => handleUpdateHoursDirect(selectedLeader, Number(e.target.value))}
+                                                />
+                                                <span className="text-[10px] text-stone-400">Pressione fora para salvar</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2 pt-2 border-t border-dashed border-stone-200">
+                                        <Label className="text-xs font-semibold text-stone-600 flex items-center gap-1">
+                                            <ShieldCheck className="w-3.5 h-3.5 text-stone-400" />
+                                            Assinaturas de Administradores Validadores (Mínimo 2)
+                                        </Label>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-white p-3 rounded-lg border">
+                                            {adminProfiles.map(adm => {
+                                                const signed = selectedLeader.approved_by?.includes(adm.id) || false
+                                                return (
+                                                    <button
+                                                        key={adm.id}
+                                                        type="button"
+                                                        onClick={() => handleToggleValidator(selectedLeader, adm.id)}
+                                                        className="flex items-center justify-between text-left text-xs p-1.5 rounded hover:bg-stone-50 transition-colors"
+                                                    >
+                                                        <span className="font-semibold text-stone-700 truncate mr-2">{adm.full_name || adm.email}</span>
+                                                        <div className="flex-shrink-0">
+                                                            {signed ? (
+                                                                <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100 font-bold border-amber-200 text-[9px] px-1 py-0.5">
+                                                                    Assinado
+                                                                </Badge>
+                                                            ) : (
+                                                                <span className="text-[9px] text-stone-400 font-medium">Assinar</span>
+                                                            )}
+                                                        </div>
+                                                    </button>
+                                                )
+                                            })}
+                                        </div>
                                     </div>
                                 </div>
 

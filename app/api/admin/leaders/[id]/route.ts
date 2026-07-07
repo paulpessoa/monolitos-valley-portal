@@ -43,7 +43,10 @@ export async function PUT(
       profile_id,
       checklist,
       monthly_engagement,
-      avatar_url
+      avatar_url,
+      dedicated_hours,
+      hours_approved,
+      approved_by
     } = body
 
     const updateData: any = {}
@@ -54,6 +57,9 @@ export async function PUT(
     if (profile_id !== undefined) updateData.profile_id = profile_id
     if (checklist !== undefined) updateData.checklist = checklist
     if (monthly_engagement !== undefined) updateData.monthly_engagement = monthly_engagement
+    if (dedicated_hours !== undefined) updateData.dedicated_hours = dedicated_hours
+    if (hours_approved !== undefined) updateData.hours_approved = hours_approved
+    if (approved_by !== undefined) updateData.approved_by = approved_by
 
     updateData.updated_at = new Date().toISOString()
 
