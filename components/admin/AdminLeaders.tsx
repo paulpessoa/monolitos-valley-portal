@@ -125,6 +125,9 @@ export function AdminLeaders() {
             const uploadFormData = new FormData()
             uploadFormData.append('file', file)
             uploadFormData.append('bucket', 'avatars')
+            if (formData.profile_id) {
+                uploadFormData.append('profileId', formData.profile_id)
+            }
             
             const res = await fetch('/api/upload', {
                 method: 'POST',
@@ -172,7 +175,15 @@ export function AdminLeaders() {
             })
             const data = await res.json()
             if (res.ok) {
-                toast.success(editingLeader ? "Liderança atualizada!" : "Liderança adicionada com sucesso!")
+                const savedAvatar = data.data?.profiles?.avatar_url
+                toast.success(
+                    editingLeader 
+                        ? `Liderança atualizada! Foto salva no perfil: ${savedAvatar ? 'Sim' : 'Não'}` 
+                        : "Liderança adicionada com sucesso!"
+                )
+                if (savedAvatar) {
+                    console.log("Avatar persistido com sucesso na conta:", savedAvatar)
+                }
                 // Refresh list of leaders
                 fetchLeaders()
                 setIsDialogOpen(false)

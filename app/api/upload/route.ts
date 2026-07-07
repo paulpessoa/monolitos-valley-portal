@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createServiceClient } from "@/lib/supabase/server"
 import { NextRequest, NextResponse } from "next/server"
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024 // 5MB
@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData()
     const file = formData.get("file") as File | null
     const bucket = formData.get("bucket") as BucketName | null
+    const profileId = formData.get("profileId") as string | null
 
     if (!file) {
       return NextResponse.json(
@@ -107,13 +108,28 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Determine target folder prefix
+    let targetFolder = user.id
+    if (profileId && profileId !== user.id) {
+      // Verify if current user is admin
+      const serviceClient = await createServiceClient()
+      const { data: profile } = await serviceClient
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single()
+      if (profile?.role === "admin") {
+        targetFolder = profileId
+      }
+    }
+
     // Generate unique filename with sanitization
     const fileExt = file.name.split(".").pop()
     const timestamp = Date.now()
     const randomStr = Math.random().toString(36).substring(2, 8)
     // Sanitize: remove special characters and spaces
     const sanitizedName = `${timestamp}-${randomStr}.${fileExt}`
-    const fileName = `${user.id}/${sanitizedName}`
+    const fileName = `${targetFolder}/${sanitizedName}`
 
     // Convert File to ArrayBuffer
     const arrayBuffer = await file.arrayBuffer()
