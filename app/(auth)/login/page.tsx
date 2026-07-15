@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { AnimateOnScroll } from '@/components/features/home/AnimateOnScroll'
 import Link from 'next/link'
 
 export default function LoginPage() {
@@ -86,7 +87,8 @@ export default function LoginPage() {
 
     return (
         <div className="flex min-h-screen items-center justify-center p-4">
-            <Card className="w-full max-w-md">
+            <AnimateOnScroll>
+                <Card className="w-full max-w-md">
                 <CardHeader>
                     <CardTitle>Bem-vindx!</CardTitle>
                     <CardDescription>
@@ -173,6 +175,7 @@ export default function LoginPage() {
                     )}
                 </CardContent>
             </Card>
+            </AnimateOnScroll>
         </div>
     )
 }

@@ -16,7 +16,7 @@ export function StartupHighlightList({ startups }: StartupHighlightListProps) {
             {startups.map((startup) => (
                 <Link
                     key={startup.id}
-                    href={`/startups`}
+                    href={`/negocios`}
                     className="group flex items-center gap-3 bg-white border border-stone-200 rounded-full pl-2 pr-4 py-1.5 hover:border-amber-400 hover:shadow-md transition-all"
                 >
                     {startup.logo_url ? (
@@ -39,7 +39,7 @@ export function StartupHighlightList({ startups }: StartupHighlightListProps) {
                 </Link>
             ))}
             <Link
-                href="/startups"
+                href="/negocios"
                 className="text-sm font-semibold text-[#F2CB05] hover:text-[#d4b304] transition-colors whitespace-nowrap"
             >
                 Ver todas →

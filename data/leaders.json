@@ -1,58 +1,114 @@
 [
   {
-    "id": "leader-1",
-    "full_name": "Pedro Daniel",
-    "role_title": "Founder & CEO",
-    "startup_name": "Dan Design Studio",
-    "linkedin_url": "https://linkedin.com/in/pedrodaniel",
-    "instagram_url": "https://instagram.com/pedrodaniel",
-    "photo_url": null,
-    "profiles": {
-      "full_name": "Pedro Daniel",
-      "email": "pedro@example.com",
-      "avatar_url": "https://ui-avatars.com/api/?name=Pedro+Daniel&background=d97706&color=fff&size=200"
-    }
-  },
-  {
-    "id": "leader-2",
-    "full_name": "Ana Paula Silva",
-    "role_title": "Fundadora",
-    "startup_name": "EduConnect",
-    "linkedin_url": "https://linkedin.com/in/anapaulasilva",
+    "id": "f32c69f6-a155-4d7e-8dad-ae44c93a6f79",
+    "full_name": "Sanderley Santos",
+    "role_title": "Liderança MV / Fundador",
+    "startup_name": "La Carta",
+    "linkedin_url": "https://www.linkedin.com/in/sanderley-santos-681918211",
     "instagram_url": null,
     "photo_url": null,
     "profiles": {
-      "full_name": "Ana Paula Silva",
-      "email": "ana@example.com",
-      "avatar_url": "https://ui-avatars.com/api/?name=Ana+Paula+Silva&background=d97706&color=fff&size=200"
+      "full_name": "Sanderley Santos",
+      "email": "sanderleysantos729@gmail.com",
+      "avatar_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/avatars/ba5e2b6f-2970-4391-8056-423830323113/avatar-1783401838540.jpg"
     }
   },
   {
-    "id": "leader-3",
-    "full_name": "Rafael Costa",
-    "role_title": "Investidor Anjo",
+    "id": "56be1dbf-10a2-4c55-a253-37305f90b4c3",
+    "full_name": "Francisco Josias da Silva Batista",
+    "role_title": "Liderança MV / Fundador",
+    "startup_name": "Coin Conut",
+    "linkedin_url": "https://www.linkedin.com/in/josias-batista",
+    "instagram_url": null,
+    "photo_url": null,
+    "profiles": {
+      "full_name": "Francisco Josias da Silva Batista",
+      "email": "josiasmartins098@gmail.com",
+      "avatar_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/avatars/f521af4f-1723-470a-a20f-9ffb6fc38fff/1781219314280-7usaen.jpg"
+    }
+  },
+  {
+    "id": "d6f4c9a6-127c-4170-b5c2-65cdb4c9f31e",
+    "full_name": "Amanda de Oliveira",
+    "role_title": "Liderança MV",
     "startup_name": null,
-    "linkedin_url": "https://linkedin.com/in/rafaelcosta",
+    "linkedin_url": "https://www.linkedin.com/in/amandapdeoliveira",
     "instagram_url": null,
     "photo_url": null,
     "profiles": {
-      "full_name": "Rafael Costa",
-      "email": "rafael@example.com",
-      "avatar_url": "https://ui-avatars.com/api/?name=Rafael+Costa&background=d97706&color=fff&size=200"
+      "full_name": "Amanda de Oliveira",
+      "email": "amandadeoliveira@alu.ufc.br",
+      "avatar_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/avatars/d354d360-04a0-4706-81cc-e729fbda4b60/avatar-1783401598819.jpg"
     }
   },
   {
-    "id": "leader-4",
-    "full_name": "Mariana Oliveira",
-    "role_title": "Mentora de Startups",
-    "startup_name": "TechForge",
-    "linkedin_url": "https://linkedin.com/in/marianaoliveira",
-    "instagram_url": "https://instagram.com/marianaoliveira",
+    "id": "8675b4cf-7ed7-4267-9315-93b4acb16533",
+    "full_name": "Kamilly Cavalcante",
+    "role_title": "Liderança MV",
+    "startup_name": null,
+    "linkedin_url": "https://www.linkedin.com/in/kamilly-cavalcante-00295b253",
+    "instagram_url": null,
     "photo_url": null,
     "profiles": {
-      "full_name": "Mariana Oliveira",
-      "email": "mariana@example.com",
-      "avatar_url": "https://ui-avatars.com/api/?name=Mariana+Oliveira&background=d97706&color=fff&size=200"
+      "full_name": "Kamilly Cavalcante",
+      "email": "anakamilly9a@gmail.com",
+      "avatar_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/avatars/e780640d-f3f4-40d8-aa74-78f6ac6748a0/avatar-1783401771985.jpg"
+    }
+  },
+  {
+    "id": "63c8f3d3-d594-45e5-881b-77f8a3593d58",
+    "full_name": "Kaike Ferreira Alves",
+    "role_title": "Liderança MV / Fundador",
+    "startup_name": "ApexVet",
+    "linkedin_url": "https://www.linkedin.com/in/kaikeferreiraalves",
+    "instagram_url": null,
+    "photo_url": null,
+    "profiles": {
+      "full_name": "Kaike Ferreira Alves",
+      "email": "kaikebr208@gmail.com",
+      "avatar_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/avatars/35b026ca-6373-4643-9024-eac5217cea02/avatar-1783401783999.jpg"
+    }
+  },
+  {
+    "id": "4e1595ad-5693-46f5-a458-8d4929b1cf78",
+    "full_name": "Ray Texeira",
+    "role_title": "Liderança MV / Fundador",
+    "startup_name": "Auricheeks / PlantEDU",
+    "linkedin_url": "https://www.linkedin.com/in/ray-texeira-2123571a0",
+    "instagram_url": null,
+    "photo_url": null,
+    "profiles": {
+      "full_name": "Ray Texeira",
+      "email": "raytexeira3@gmail.com",
+      "avatar_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/avatars/54c254d0-c204-4504-a9ea-cc6c889baa98/1763574033158.jpg"
+    }
+  },
+  {
+    "id": "5f5112bc-a0a8-4b1c-a6e6-d7c26dad5748",
+    "full_name": "Luiz Felipe",
+    "role_title": "Liderança MV / Fundador",
+    "startup_name": "SpeedMED",
+    "linkedin_url": "https://www.linkedin.com/in/luiz-felipe-muniz-de-albuquerque-863980215",
+    "instagram_url": null,
+    "photo_url": null,
+    "profiles": {
+      "full_name": "Luiz Felipe",
+      "email": "felipeace42@gmail.com",
+      "avatar_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/avatars/8f497c54-8939-4f37-b3e1-ddf4a39bf87f/avatar-1783403869293.jpg"
+    }
+  },
+  {
+    "id": "9cc308c6-ad25-4eca-9514-a5e74864597f",
+    "full_name": "Paul Pessoa",
+    "role_title": "Liderança MV",
+    "startup_name": null,
+    "linkedin_url": "https://linkedin.com/in/paulmspessoa",
+    "instagram_url": null,
+    "photo_url": null,
+    "profiles": {
+      "full_name": "Paul Pessoa",
+      "email": "paulmspessoa@gmail.com",
+      "avatar_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/avatars/cc53b619-b865-4f9a-96cd-ede63dc9a1ce/1763450533232.png"
     }
   }
 ]

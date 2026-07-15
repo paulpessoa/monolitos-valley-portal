@@ -88,7 +88,7 @@ export function StartupDetailsModal({
 
     const handleOpenFullPage = () => {
         if (startup?.slug) {
-            window.open(`/startups/${startup.slug}`, '_blank')
+            window.open(`/negocios/${startup.slug}`, '_blank')
         }
     }
 

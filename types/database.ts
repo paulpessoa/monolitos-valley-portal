@@ -105,7 +105,6 @@ export interface Partner {
   name: string
   description: string | null
   image_url: string | null
-  logo_url: string | null
   website: string | null
   category: string | null
   approved: boolean

@@ -1,35 +1,82 @@
 [
   {
-    "id": "partner-1",
-    "name": "Parceiro Exemplo 1",
-    "description": "Descrição do parceiro",
-    "image_url": null,
-    "logo_url": "https://via.placeholder.com/140x70?text=Parceiro+1",
-    "website": "https://example.com",
+    "id": "8edecd23-7abb-4c5c-bd2a-e045059296c7",
+    "name": "FADAT",
+    "description": "Faculdade Dom Adélio Tomasin, uma instituição de ensino superior localizada em Quixadá, no Ceará, que oferece diversos cursos, como Direito, Administração e Enfermagem.",
+    "image_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/partners/logos/1763512639427-zw13df-422864144_414007794624715_268860773937991080_n.jpg",
+    "website": "https://fadat.edu.br/",
+    "category": "Universidade",
+    "approved": true,
+    "created_at": "2025-11-18T21:37:27.497056-03:00"
+  },
+  {
+    "id": "ba447814-45a5-4d2e-aac5-e93be934d3c9",
+    "name": "SEBRAE for Startups",
+    "description": "Cadastre a sua empresa! Encontre a oportunidade oferecida pelo Sebrae que combina com a sua startup e se inscreva agora mesmo!",
+    "image_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/partners/logos/1763503087794-ont7zl-logo-Sebrae%20for%20Startups-cor.avif",
+    "website": "https://programas.sebraestartups.com.br",
+    "category": "Consultoria",
+    "approved": true,
+    "created_at": "2025-11-18T18:58:46.612765-03:00"
+  },
+  {
+    "id": "edeb74e1-3396-4a6f-857f-2674424cd20d",
+    "name": "Universidade Federal do Ceará",
+    "description": "Universidade Federal do Ceará - Campus Quixadá",
+    "image_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/partners/logos/1763503171530-pbl27o-brasao-vertical-colorido.png",
+    "website": "https://www.quixada.ufc.br/",
     "category": "Tecnologia",
     "approved": true,
-    "created_at": "2025-01-01T00:00:00Z"
+    "created_at": "2025-11-18T18:59:34.54072-03:00"
   },
   {
-    "id": "partner-2",
-    "name": "Parceiro Exemplo 2",
-    "description": "Outra descrição",
-    "image_url": null,
-    "logo_url": "https://via.placeholder.com/140x70?text=Parceiro+2",
-    "website": "https://example.org",
-    "category": "Educação",
+    "id": "b5820caa-f984-4745-93d7-3aa6b2476c0a",
+    "name": "INOVE",
+    "description": "Núcleo de inovação e empreendedorismo\ndo campus da UFC em Quixadá",
+    "image_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/partners/logos/1763503240755-fuiugf4-inove%20ufc%20quixada.png",
+    "website": "https://inove.quixada.ufc.br/",
+    "category": "Incubação",
     "approved": true,
-    "created_at": "2025-01-02T00:00:00Z"
+    "created_at": "2025-11-18T19:00:43.023901-03:00"
   },
   {
-    "id": "partner-3",
-    "name": "Parceiro Exemplo 3",
-    "description": null,
-    "image_url": null,
-    "logo_url": "https://via.placeholder.com/140x70?text=Parceiro+3",
-    "website": null,
-    "category": "Inovação",
+    "id": "c043ba3d-9f9e-4fb3-b2a8-fa7a9630cc8c",
+    "name": "Corredores Digitais",
+    "description": "O Corredores Digitais é o hub de inovação do Governo do Estado do Ceará, realizado pela Secretaria da Ciência, Tecnologia e Educação Superior (SECITECE), especialista no apoio a negócios inovadores e na aceleração de startups. Com mais de 12 edições em seu histórico, o programa se consolidou como um dos principais agentes de fomento à inovação no Estado, oferecendo jornadas de apoio estruturadas, mentorias com especialistas, serviços personalizados e benefícios de empresas de tecnologia.\n\nPor meio de editais de seleção, o Hub apoia empreendedores em diversas etapas do desenvolvimento de seus negócios, conectando-os a metodologias exclusivas, acompanhamento de analistas de negócios e oportunidades estratégicas para crescimento.",
+    "image_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/partners/logos/1763503465139-xtzah4c-Corredores-Digitais-Logo-Final-HORIZONTAL.png",
+    "website": "https://www.sct.ce.gov.br/corredoresdigitais/",
+    "category": "Consultoria",
     "approved": true,
-    "created_at": "2025-01-03T00:00:00Z"
+    "created_at": "2025-11-18T19:04:27.988277-03:00"
+  },
+  {
+    "id": "fcea6a32-dc16-4d32-9f5a-04d289b19bda",
+    "name": "Unicatólica de Quixadá",
+    "description": "O Centro Universitário Católica de Quixadá é uma instituição de ensino superior privada, credenciada junto ao Ministério da Educação. Sua sede é localizada em Quixadá, Ceará. Sua mantenedora é a Associação Educacional e Cultural de Quixadá.",
+    "image_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/partners/logos/1763512434768-dfd96-PNG_Logo_cor_solida-1024x236.webp",
+    "website": "https://unicatolicaquixada.edu.br/",
+    "category": "Universidade",
+    "approved": true,
+    "created_at": "2025-11-18T21:34:18.023746-03:00"
+  },
+  {
+    "id": "35292aaa-776e-4f81-a2b9-f1179d366cd1",
+    "name": "Sebrae Ceará",
+    "description": "O Sebrae Sertão Central é um importante parceiro no fortalecimento do ecossistema de empreendedorismo e inovação da região. Atuando no apoio a startups, pequenos negócios e iniciativas inovadoras, o Sebrae oferece capacitações, mentorias e conexões estratégicas que impulsionam o desenvolvimento sustentável e a geração de oportunidades no Sertão Central.",
+    "image_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/partners/logos/1769810540754-vrutc-a2b9643a2ecad92b82a556b3a294c823.jpg",
+    "website": "https://sebrae.com.br/sites/PortalSebrae/ufs/ce?codUf=6",
+    "category": "Instituição de apoio",
+    "approved": true,
+    "created_at": "2026-01-30T19:03:56.090531-03:00"
+  },
+  {
+    "id": "aa25a381-3af5-4633-9f85-7a1cf9c3a964",
+    "name": "ELI Quixadá",
+    "description": "O Ecossistema Local de Inovação de Quixadá é uma iniciativa estratégica que reúne atores do município, como empresas, universidades, instituições públicas e empreendedores, com o objetivo de fortalecer a cultura de inovação, colaboração e desenvolvimento tecnológico na região. Faz parte do Programa ELI do Sebrae, que busca criar ambientes propícios ao empreendedorismo inovador e ao crescimento sustentável dos pequenos negócios, promovendo conexões, capacitações e ações integradas para impulsionar o potencial econômico e social de Quixadá.",
+    "image_url": "https://chynkcbgawvlkggmswhb.supabase.co/storage/v1/object/public/partners/logos/1769811262185-w84mdq-Inova%20MV%20-%201ed.png",
+    "website": "https://www.sebrae-eli.com.br/",
+    "category": "Ecossistema",
+    "approved": true,
+    "created_at": "2026-01-30T19:14:38.434363-03:00"
   }
 ]

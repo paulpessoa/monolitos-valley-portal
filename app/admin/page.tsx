@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { Loader2, Check, X, Edit } from 'lucide-react'
 import { toast } from 'sonner'
+import { AnimateOnScroll } from '@/components/features/home/AnimateOnScroll'
 import { AdminLeaders } from '@/components/admin/AdminLeaders'
 
 interface PendingItem {
@@ -162,26 +163,31 @@ export default function AdminPage() {
             </div>
 
             <Tabs defaultValue="startups" className="w-full">
-                <div className="flex justify-center mb-6">
-                    <TabsList className="flex-wrap h-auto">
-                        <TabsTrigger value="startups">
-                            Startups {currentData.length > 0 && <Badge className="ml-2">{currentData.length}</Badge>}
-                        </TabsTrigger>
-                        <TabsTrigger value="leaders">Lideranças</TabsTrigger>
-                    </TabsList>
-                </div>
+                <AnimateOnScroll>
+                    <div className="flex justify-center mb-6">
+                        <TabsList className="flex-wrap h-auto">
+                            <TabsTrigger value="startups">
+                                Startups {currentData.length > 0 && <Badge className="ml-2">{currentData.length}</Badge>}
+                            </TabsTrigger>
+                            <TabsTrigger value="leaders">Lideranças</TabsTrigger>
+                        </TabsList>
+                    </div>
+                </AnimateOnScroll>
 
                 <TabsContent value="startups" className="mt-6">
                     {currentData.length === 0 ? (
-                        <Card>
-                            <CardContent className="py-12 text-center">
-                                <p className="text-muted-foreground">Nenhuma startup {viewMode === 'pending' ? 'pendente' : 'aprovada'}</p>
-                            </CardContent>
-                        </Card>
+                        <AnimateOnScroll>
+                            <Card>
+                                <CardContent className="py-12 text-center">
+                                    <p className="text-muted-foreground">Nenhuma startup {viewMode === 'pending' ? 'pendente' : 'aprovada'}</p>
+                                </CardContent>
+                            </Card>
+                        </AnimateOnScroll>
                     ) : (
                         <div className="space-y-4">
                             {currentData.map((item: PendingItem) => (
-                                <Card key={item.id}>
+                                <AnimateOnScroll key={item.id}>
+                                    <Card>
                                     <CardHeader>
                                         <div className="flex items-start justify-between">
                                             <div>
@@ -224,7 +230,8 @@ export default function AdminPage() {
                                         </div>
                                     </CardContent>
                                 </Card>
-                            ))}
+                            </AnimateOnScroll>
+                        ))}
                         </div>
                     )}
                 </TabsContent>

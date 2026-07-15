@@ -29,7 +29,7 @@ export function StartupCard({ startup, variant = 'compact', onViewDetails }: Sta
 
     const handleViewDetails = () => {
         if (startup.slug) {
-            router.push(`/startups/${startup.slug}`)
+            router.push(`/negocios/${startup.slug}`)
         } else if (onViewDetails) {
             onViewDetails(startup)
         }

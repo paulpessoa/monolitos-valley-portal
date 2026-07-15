@@ -214,7 +214,7 @@ export function StartupMap({ startups }: StartupMapProps) {
                                 {/* CTA Button */}
                                 {startup.slug && (
                                     <Link
-                                        href={`/startups/${startup.slug}`}
+                                        href={`/negocios/${startup.slug}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="flex items-center justify-center gap-2 w-full bg-[#F2CB05] hover:bg-[#d4b304] text-stone-900 font-semibold rounded-lg px-4 py-2.5 transition-all hover:shadow-md"

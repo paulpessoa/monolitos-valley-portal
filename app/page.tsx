@@ -116,7 +116,7 @@ export default async function HomePage() {
                   <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-2">Startups em Destaque</h2>
                   <p className="text-stone-600">Conheça as startups inovadoras que estão transformando o Sertão Central</p>
                 </div>
-                <Link href="/startups" className="text-[#F2CB05] hover:text-[#d4b304] font-semibold text-sm border border-[#F2CB05] px-4 py-2 rounded-lg hover:bg-[#F2CB05]/10 transition-colors w-fit">
+                <Link href="/negocios" className="text-[#F2CB05] hover:text-[#d4b304] font-semibold text-sm border border-[#F2CB05] px-4 py-2 rounded-lg hover:bg-[#F2CB05]/10 transition-colors w-fit">
                   Ver todas →
                 </Link>
               </div>

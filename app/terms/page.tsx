@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { FileText, AlertCircle, CheckCircle, XCircle, Scale } from 'lucide-react'
+import { AnimateOnScroll } from '@/components/features/home/AnimateOnScroll'
 
 export const metadata: Metadata = {
     title: 'Termos de Uso | Monólitos Valley',
@@ -30,7 +31,7 @@ export default function TermsPage() {
 
                 {/* Content */}
                 <div className="bg-white rounded-xl shadow-sm border border-stone-200 p-8 space-y-8">
-                    {/* Seção 1 */}
+                    <AnimateOnScroll>
                     <section>
                         <div className="flex items-center gap-2 mb-4">
                             <CheckCircle className="h-5 w-5 text-blue-600" />
@@ -46,8 +47,9 @@ export default function TermsPage() {
                             </p>
                         </div>
                     </section>
+                    </AnimateOnScroll>
 
-                    {/* Seção 2 */}
+                    <AnimateOnScroll>
                     <section>
                         <div className="flex items-center gap-2 mb-4">
                             <Scale className="h-5 w-5 text-blue-600" />
@@ -68,8 +70,9 @@ export default function TermsPage() {
                             </ul>
                         </div>
                     </section>
+                    </AnimateOnScroll>
 
-                    {/* Seção 3 */}
+                    <AnimateOnScroll>
                     <section>
                         <div className="flex items-center gap-2 mb-4">
                             <CheckCircle className="h-5 w-5 text-blue-600" />
@@ -95,8 +98,9 @@ export default function TermsPage() {
                             </div>
                         </div>
                     </section>
+                    </AnimateOnScroll>
 
-                    {/* Seção 4 */}
+                    <AnimateOnScroll>
                     <section>
                         <div className="flex items-center gap-2 mb-4">
                             <AlertCircle className="h-5 w-5 text-blue-600" />
@@ -116,8 +120,9 @@ export default function TermsPage() {
                             </ul>
                         </div>
                     </section>
+                    </AnimateOnScroll>
 
-                    {/* Seção 5 */}
+                    <AnimateOnScroll>
                     <section>
                         <div className="flex items-center gap-2 mb-4">
                             <FileText className="h-5 w-5 text-blue-600" />
@@ -142,8 +147,9 @@ export default function TermsPage() {
                             </div>
                         </div>
                     </section>
+                    </AnimateOnScroll>
 
-                    {/* Seção 6 */}
+                    <AnimateOnScroll>
                     <section>
                         <div className="flex items-center gap-2 mb-4">
                             <AlertCircle className="h-5 w-5 text-blue-600" />
@@ -166,8 +172,9 @@ export default function TermsPage() {
                             </p>
                         </div>
                     </section>
+                    </AnimateOnScroll>
 
-                    {/* Seção 7 */}
+                    <AnimateOnScroll>
                     <section>
                         <div className="flex items-center gap-2 mb-4">
                             <XCircle className="h-5 w-5 text-blue-600" />
@@ -187,8 +194,9 @@ export default function TermsPage() {
                             </p>
                         </div>
                     </section>
+                    </AnimateOnScroll>
 
-                    {/* Seção 8 */}
+                    <AnimateOnScroll>
                     <section>
                         <div className="flex items-center gap-2 mb-4">
                             <AlertCircle className="h-5 w-5 text-blue-600" />
@@ -206,8 +214,9 @@ export default function TermsPage() {
                             </ul>
                         </div>
                     </section>
+                    </AnimateOnScroll>
 
-                    {/* Seção 9 */}
+                    <AnimateOnScroll>
                     <section>
                         <div className="flex items-center gap-2 mb-4">
                             <Scale className="h-5 w-5 text-blue-600" />
@@ -226,8 +235,9 @@ export default function TermsPage() {
                             </ul>
                         </div>
                     </section>
+                    </AnimateOnScroll>
 
-                    {/* Seção 10 */}
+                    <AnimateOnScroll>
                     <section>
                         <div className="flex items-center gap-2 mb-4">
                             <FileText className="h-5 w-5 text-blue-600" />
@@ -241,8 +251,9 @@ export default function TermsPage() {
                             </p>
                         </div>
                     </section>
+                    </AnimateOnScroll>
 
-                    {/* Seção 11 */}
+                    <AnimateOnScroll>
                     <section>
                         <div className="flex items-center gap-2 mb-4">
                             <Scale className="h-5 w-5 text-blue-600" />
@@ -255,8 +266,9 @@ export default function TermsPage() {
                             </p>
                         </div>
                     </section>
+                    </AnimateOnScroll>
 
-                    {/* Seção 12 */}
+                    <AnimateOnScroll>
                     <section>
                         <div className="flex items-center gap-2 mb-4">
                             <AlertCircle className="h-5 w-5 text-blue-600" />
@@ -270,6 +282,7 @@ export default function TermsPage() {
                             </div>
                         </div>
                     </section>
+                    </AnimateOnScroll>
                 </div>
 
                 {/* Footer Links */}
