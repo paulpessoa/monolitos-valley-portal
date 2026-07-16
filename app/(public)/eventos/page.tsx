@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 
 const calendarIframe = (
     <iframe
-        src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FFortaleza&showPrint=0&src=bW9ub2xpdG9zdmFsbGV5QGdtYWlsLmNvbQ&src=YzRkMDQ2YTY3ODkyMWQxMWFjYzEzMjM1Yjk0NzIzNzE3NTEyYWIxMDVlNmI3YTY5MWVmNzAwNDIyNmI0Y2NmOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=cHQtYnIuYnJhemlsaWFuI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%23039be5&color=%23e67c73&color=%230b8043"
+        src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FFortaleza&showPrint=0&title=Eventos%20-%20Mon%C3%B3litos%20Valley&src=YzRkMDQ2YTY3ODkyMWQxMWFjYzEzMjM1Yjk0NzIzNzE3NTEyYWIxMDVlNmI3YTY5MWVmNzAwNDIyNmI0Y2NmOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=cHQtYnIuYnJhemlsaWFuI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%23e67c73&color=%230b8043"
         style={{ border: 'solid 1px #777' }}
         width="100%"
         height="600"
